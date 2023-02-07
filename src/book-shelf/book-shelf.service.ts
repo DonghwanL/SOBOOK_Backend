@@ -1,6 +1,7 @@
+import { v1 as uuid } from 'uuid';
 import { Injectable } from '@nestjs/common';
 import { BookShelf, BookStatus } from './book-shelf.model';
-import { v1 as uuid } from 'uuid';
+import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
 
 @Injectable()
 export class BookShelfService {
@@ -10,15 +11,10 @@ export class BookShelfService {
     return this.bookShelf;
   }
 
-  createBookShelf(
-    title: string,
-    image: string,
-    author: string,
-    publisher: string,
-    pubdate: string,
-    memo: string,
-    rating: number,
-  ) {
+  createBookShelf(createBookShelfDto: CreateBookShelfDto) {
+    const { title, image, author, publisher, pubdate, memo, rating } =
+      createBookShelfDto;
+
     const bookShelf: BookShelf = {
       id: uuid(),
       title,
@@ -32,6 +28,20 @@ export class BookShelfService {
     };
 
     this.bookShelf.push(bookShelf);
+    return bookShelf;
+  }
+
+  getBookShelfById(id: string): BookShelf {
+    return this.bookShelf.find((book) => book.id === id);
+  }
+
+  deleteBookShelf(id: string): void {
+    this.bookShelf = this.bookShelf.filter((book) => book.id !== id);
+  }
+
+  updateBookStatus(id: string, status: BookStatus): BookShelf {
+    const bookShelf = this.getBookShelfById(id);
+    bookShelf.status = status;
     return bookShelf;
   }
 }

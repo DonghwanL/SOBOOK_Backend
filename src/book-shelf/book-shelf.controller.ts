@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { BookShelf } from './book-shelf.model';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { BookShelf, BookStatus } from './book-shelf.model';
 import { BookShelfService } from './book-shelf.service';
+import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
 
 @Controller('bookShelf')
 export class BookShelfController {
@@ -12,15 +13,22 @@ export class BookShelfController {
   }
 
   @Post()
-  createBookShelf(@Body() body): BookShelf {
-    return this.bookShelfService.createBookShelf(
-      body.title,
-      body.image,
-      body.author,
-      body.publisher,
-      body.pubdate,
-      body.memo,
-      body.rating,
-    );
+  createBookShelf(@Body() createBookShelfDto): CreateBookShelfDto {
+    return this.bookShelfService.createBookShelf(createBookShelfDto);
+  }
+
+  @Get('/:id')
+  getBookShelfById(@Param('id') id: string): BookShelf {
+    return this.bookShelfService.getBookShelfById(id);
+  }
+
+  @Delete('/:id')
+  deleteBookShelf(@Param('id') id: string): void {
+    this.bookShelfService.deleteBookShelf(id);
+  }
+
+  @Patch('/:id/status')
+  updateBookStatus(@Param('id') id: string, @Body('status') status: BookStatus) {
+    return this.bookShelfService.updateBookStatus(id, status);
   }
 }

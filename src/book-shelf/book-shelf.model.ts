@@ -8,6 +8,8 @@ export interface BookShelf {
   memo?: string;
   status: BookStatus;
   rating?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export enum BookStatus {
