@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { Book } from './book.model';
 import { BooksService } from './books.service';
 
@@ -8,6 +8,6 @@ export class BooksController {
 
   @Get()
   getAllBookShelf(): Book[] {
-    return this.booksService.getAllBookShelf();
+    return this.booksService.getAllBooks();
   }
 }

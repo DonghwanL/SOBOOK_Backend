@@ -5,7 +5,7 @@ import { Book } from './book.model';
 export class BooksService {
   private books: Book[] = [];
 
-  getAllBookShelf(): Book[] {
+  getAllBooks(): Book[] {
     return this.books;
   }
 }
