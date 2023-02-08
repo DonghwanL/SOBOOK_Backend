@@ -5,7 +5,7 @@ import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
 
 @Controller('bookShelf')
 export class BookShelfController {
-  constructor(private bookShelfService: BookShelfService) {}
+  constructor(private readonly bookShelfService: BookShelfService) {}
 
   @Get()
   getAllBookShelf(): BookShelf[] {
@@ -13,7 +13,7 @@ export class BookShelfController {
   }
 
   @Post()
-  createBookShelf(@Body() createBookShelfDto): CreateBookShelfDto {
+  createBookShelf(@Body() createBookShelfDto: CreateBookShelfDto) {
     return this.bookShelfService.createBookShelf(createBookShelfDto);
   }
 

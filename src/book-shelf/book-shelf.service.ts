@@ -12,8 +12,7 @@ export class BookShelfService {
   }
 
   createBookShelf(createBookShelfDto: CreateBookShelfDto) {
-    const { title, image, author, publisher, pubdate, memo, rating } =
-      createBookShelfDto;
+    const { title, image, author, publisher, pubdate, memo, rating } = createBookShelfDto;
 
     const bookShelf: BookShelf = {
       id: uuid(),
