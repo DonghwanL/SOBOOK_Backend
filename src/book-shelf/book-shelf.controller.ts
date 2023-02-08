@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/commo
 import { BookShelf, BookStatus } from './book-shelf.model';
 import { BookShelfService } from './book-shelf.service';
 import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
+import { BookStatusValidationPipe } from './pipe/book-status-validation.pipe';
 
 @Controller('bookShelf')
 export class BookShelfController {
@@ -28,7 +29,7 @@ export class BookShelfController {
   }
 
   @Patch('/:id/status')
-  updateBookStatus(@Param('id') id: string, @Body('status') status: BookStatus) {
+  updateBookStatus(@Param('id') id: string, @Body('status', BookStatusValidationPipe) status: BookStatus) {
     return this.bookShelfService.updateBookStatus(id, status);
   }
 }
