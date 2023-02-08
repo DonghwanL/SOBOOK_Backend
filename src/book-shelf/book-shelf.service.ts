@@ -1,5 +1,5 @@
 import { v1 as uuid } from 'uuid';
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { BookShelf, BookStatus } from './book-shelf.model';
 import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
 
@@ -31,11 +31,15 @@ export class BookShelfService {
   }
 
   getBookShelfById(id: string): BookShelf {
-    return this.bookShelf.find((book) => book.id === id);
+    const find = this.bookShelf.find((book) => book.id === id);
+    if (!find) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
+
+    return find;
   }
 
   deleteBookShelf(id: string): void {
-    this.bookShelf = this.bookShelf.filter((book) => book.id !== id);
+    const find = this.getBookShelfById(id);
+    this.bookShelf = this.bookShelf.filter((book) => book.id !== find.id);
   }
 
   updateBookStatus(id: string, status: BookStatus): BookShelf {
