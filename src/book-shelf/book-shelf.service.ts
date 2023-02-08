@@ -1,40 +1,34 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { BookStatus } from './book-status.enum';
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { BookShelf } from './entity/book-shelf.entity';
+import { BookShelfRepository } from './repository/book-shelf.repository';
 import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
+import { UpdateBookShelfDto } from './dto/update-bookShelf.dto';
 
 @Injectable()
 export class BookShelfService {
-  // getAllBookShelf(): BookShelf[] {
-  //   return this.bookShelf;
-  // }
-  // createBookShelf(createBookShelfDto: CreateBookShelfDto) {
-  //   const { title, image, author, publisher, pubdate, memo, rating } = createBookShelfDto;
-  //   const bookShelf: BookShelf = {
-  //     id: uuid(),
-  //     title,
-  //     image,
-  //     author,
-  //     publisher,
-  //     pubdate,
-  //     memo,
-  //     rating,
-  //     status: BookStatus.READING,
-  //   };
-  //   this.bookShelf.push(bookShelf);
-  //   return bookShelf;
-  // }
-  // getBookShelfById(id: string): BookShelf {
-  //   const find = this.bookShelf.find((book) => book.id === id);
-  //   if (!find) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
-  //   return find;
-  // }
-  // deleteBookShelf(id: string): void {
-  //   const find = this.getBookShelfById(id);
-  //   this.bookShelf = this.bookShelf.filter((book) => book.id !== find.id);
-  // }
-  // updateBookStatus(id: string, status: BookStatus): BookShelf {
-  //   const bookShelf = this.getBookShelfById(id);
-  //   bookShelf.status = status;
-  //   return bookShelf;
-  // }
+  constructor(
+    @InjectRepository(BookShelfRepository)
+    private bookShelfRepository: BookShelfRepository,
+  ) {}
+
+  getAllBookShelf(): Promise<BookShelf[]> {
+    return this.bookShelfRepository.getAllBookShelf();
+  }
+
+  createBookShelf(createBookShelfDto: CreateBookShelfDto): Promise<BookShelf> {
+    return this.bookShelfRepository.createBookShelf(createBookShelfDto);
+  }
+
+  getBookShelfById(id: number): Promise<BookShelf> {
+    return this.bookShelfRepository.getBookShelfById(id);
+  }
+
+  deleteBookShelf(id: number): Promise<void> {
+    return this.bookShelfRepository.deleteBookShelf(id);
+  }
+
+  updateBookShelf(id: number, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {
+    return this.bookShelfRepository.updateBookShelf(id, updateBookShelfDto);
+  }
 }

@@ -1,13 +1,9 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateBookShelfDto {
   @IsString()
   @IsNotEmpty()
   readonly title: string;
-
-  @IsString()
-  @IsNotEmpty()
-  readonly image: string;
 
   @IsString()
   @IsNotEmpty()
@@ -22,8 +18,12 @@ export class CreateBookShelfDto {
   readonly pubdate: string;
 
   @IsOptional()
+  readonly image?: string;
+
+  @IsOptional()
   readonly memo?: string;
 
+  @IsNumber()
   @IsOptional()
   readonly rating?: number;
 }

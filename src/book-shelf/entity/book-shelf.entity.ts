@@ -1,11 +1,11 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { BookStatus } from '../book-status.enum';
 import { Common } from './common.entity';
+import { BookStatus } from '../book-status.enum';
 
-@Entity()
+@Entity({ name: 'BookShelf' })
 export class BookShelf extends Common {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   title: string;
@@ -19,15 +19,15 @@ export class BookShelf extends Common {
   @Column()
   pubdate: string;
 
-  @Column()
+  @Column({ nullable: true })
   image: string;
 
-  @Column()
+  @Column({ nullable: true })
   memo: string;
 
-  @Column()
+  @Column({ default: 0 })
   rating: number;
 
-  @Column()
+  @Column({ default: BookStatus.READING })
   status: BookStatus;
 }
