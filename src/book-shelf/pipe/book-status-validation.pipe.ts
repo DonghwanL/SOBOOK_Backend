@@ -1,5 +1,5 @@
 import { BadRequestException, PipeTransform } from '@nestjs/common';
-import { BookStatus } from '../book-shelf.model';
+import { BookStatus } from '../book-status.enum';
 
 export class BookStatusValidationPipe implements PipeTransform {
   readonly StatusOptions = [BookStatus.READING, BookStatus.COMPLETE];

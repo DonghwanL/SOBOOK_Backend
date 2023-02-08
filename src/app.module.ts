@@ -3,7 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BooksModule } from './books/books.module';
 import { BookShelfModule } from './book-shelf/book-shelf.module';
-import { BookShelf } from './book-shelf/book-shelf.entity';
+import { BookShelf } from './book-shelf/entity/book-shelf.entity';
 
 @Module({
   imports: [

@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { BookShelf } from './book-shelf.entity';
+import { BookShelf } from './entity/book-shelf.entity';
 import { CustomRepository } from './typeorm-ex.decorator';
 
 @CustomRepository(BookShelf)
