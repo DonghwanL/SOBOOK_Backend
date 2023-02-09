@@ -2,12 +2,11 @@ import { Common } from 'src/book-shelf/entity/common.entity';
 import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity({ name: 'user' })
-@Unique(['email'])
 export class User extends Common {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Column()
