@@ -1,7 +1,6 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-declare const module: any;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -13,11 +12,9 @@ async function bootstrap() {
       stopAtFirstError: true,
     }),
   );
-  await app.listen(9000);
 
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
+  const PORT = process.env.SERVER_PORT;
+  await app.listen(PORT);
+  Logger.log(`🚀 Application running on port ${PORT}`);
 }
 bootstrap();

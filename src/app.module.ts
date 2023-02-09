@@ -16,6 +16,7 @@ import { User } from './auth/entity/user.entity';
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().valid('dev', 'prod', 'test').default('dev'),
+        SERVER_PORT: Joi.string().required(),
         DB_HOST: Joi.string().required(),
         DB_PORT: Joi.string().required(),
         DB_USERNAME: Joi.string().required(),
@@ -33,7 +34,7 @@ import { User } from './auth/entity/user.entity';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
       synchronize: true,
-      logging: true,
+      logging: false,
       entities: [BookShelf, User],
     }),
     BooksModule,
