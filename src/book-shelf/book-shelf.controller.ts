@@ -13,8 +13,8 @@ export class BookShelfController {
   constructor(private readonly bookShelfService: BookShelfService) {}
 
   @Get()
-  getAllBookShelf(): Promise<BookShelf[]> {
-    return this.bookShelfService.getAllBookShelf();
+  getAllBookShelf(@GetUser() user: User): Promise<BookShelf[]> {
+    return this.bookShelfService.getAllBookShelf(user);
   }
 
   @Get('/:id')
@@ -36,7 +36,7 @@ export class BookShelfController {
   }
 
   @Delete('/:id')
-  deleteBookShelf(@Param('id', ParseIntPipe) id): Promise<void> {
-    return this.bookShelfService.deleteBookShelf(id);
+  deleteBookShelf(@Param('id', ParseIntPipe) id, @GetUser() user: User): Promise<void> {
+    return this.bookShelfService.deleteBookShelf(id, user);
   }
 }

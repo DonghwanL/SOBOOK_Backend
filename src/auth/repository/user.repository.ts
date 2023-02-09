@@ -8,11 +8,11 @@ import { AuthCredentialsDto } from '../dto/auth-credential.dto';
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
   async createUser(authcredentialsDto: AuthCredentialsDto): Promise<void> {
-    const { email, nickName, password } = authcredentialsDto;
+    const { email, nickname, password } = authcredentialsDto;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
-    const user = this.create({ email, nickName, password: hashedPassword });
+    const user = this.create({ email, nickname, password: hashedPassword });
 
     try {
       await this.save(user);

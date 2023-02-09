@@ -11,7 +11,7 @@ export class User extends Common {
   email: string;
 
   @Column()
-  nickName: string;
+  nickname: string;
 
   @Column()
   password: string;

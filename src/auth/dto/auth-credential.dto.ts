@@ -9,7 +9,7 @@ export class AuthCredentialsDto {
   @IsOptional()
   @MinLength(2)
   @MaxLength(10)
-  nickName?: string;
+  nickname?: string;
 
   @IsString()
   @IsNotEmpty()

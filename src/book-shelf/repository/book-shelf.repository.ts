@@ -8,12 +8,16 @@ import { User } from 'src/auth/entity/user.entity';
 
 @CustomRepository(BookShelf)
 export class BookShelfRepository extends Repository<BookShelf> {
-  async getAllBookShelf(): Promise<BookShelf[]> {
-    return this.find();
+  async getAllBookShelf(user: User): Promise<BookShelf[]> {
+    const query = this.createQueryBuilder('bookShelf');
+    query.where('bookShelf.userId = :userId', { userId: user.id });
+    const bookShelf = await query.getMany();
+
+    return bookShelf;
   }
 
   async getBookShelfById(id: number): Promise<BookShelf> {
-    const found = await this.findOneBy({ id: id });
+    const found = await this.findOneBy({ id });
     if (!found) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
 
     return found;
@@ -49,8 +53,8 @@ export class BookShelfRepository extends Repository<BookShelf> {
     return updateBook;
   }
 
-  async deleteBookShelf(id: number): Promise<void> {
+  async deleteBookShelf(id: number, user: User): Promise<void> {
     const found = await this.getBookShelfById(id);
-    await this.delete(found.id);
+    await this.delete({ id: found.id, user });
   }
 }

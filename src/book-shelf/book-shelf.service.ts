@@ -13,8 +13,8 @@ export class BookShelfService {
     private bookShelfRepository: BookShelfRepository,
   ) {}
 
-  getAllBookShelf(): Promise<BookShelf[]> {
-    return this.bookShelfRepository.getAllBookShelf();
+  getAllBookShelf(user: User): Promise<BookShelf[]> {
+    return this.bookShelfRepository.getAllBookShelf(user);
   }
 
   getBookShelfById(id: number): Promise<BookShelf> {
@@ -29,7 +29,7 @@ export class BookShelfService {
     return this.bookShelfRepository.updateBookShelf(id, updateBookShelfDto);
   }
 
-  deleteBookShelf(id: number): Promise<void> {
-    return this.bookShelfRepository.deleteBookShelf(id);
+  deleteBookShelf(id: number, user: User): Promise<void> {
+    return this.bookShelfRepository.deleteBookShelf(id, user);
   }
 }
