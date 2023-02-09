@@ -21,12 +21,12 @@ export class BookShelfService {
     return this.bookShelfRepository.getBookShelfById(id);
   }
 
-  createBookShelf(createBookShelfDto: CreateBookShelfDto, user: User): Promise<BookShelf> {
+  createBookShelf(createBookShelfDto: CreateBookShelfDto, user: User): Promise<void> {
     return this.bookShelfRepository.createBookShelf(createBookShelfDto, user);
   }
 
-  updateBookShelf(id: number, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {
-    return this.bookShelfRepository.updateBookShelf(id, updateBookShelfDto);
+  updateBookShelf(id: number, user: User, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {
+    return this.bookShelfRepository.updateBookShelf(id, user, updateBookShelfDto);
   }
 
   deleteBookShelf(id: number, user: User): Promise<void> {

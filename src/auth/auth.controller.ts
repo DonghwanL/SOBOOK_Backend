@@ -21,7 +21,7 @@ export class AuthController {
 
   @Post('/login')
   login(@Body() authcredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
-    this.logger.verbose(`login: ${JSON.stringify(authcredentialsDto)}`);
+    this.logger.verbose(`login: ${JSON.stringify(authcredentialsDto.email)}`);
     return this.authService.login(authcredentialsDto);
   }
 }

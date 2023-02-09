@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { NotFoundException } from '@nestjs/common';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { BookShelf } from '../entity/book-shelf.entity';
 import { CustomRepository } from '../../common/typeorm-ex.decorator';
 import { CreateBookShelfDto } from '../dto/create-bookShelf.dto';
@@ -23,8 +23,11 @@ export class BookShelfRepository extends Repository<BookShelf> {
     return found;
   }
 
-  async createBookShelf(createBookShelfDto: CreateBookShelfDto, user: User): Promise<BookShelf> {
+  async createBookShelf(createBookShelfDto: CreateBookShelfDto, user: User): Promise<void> {
     const { title, image, author, publisher, pubdate, memo, rating } = createBookShelfDto;
+    const findBook = await this.findOneBy({ title });
+
+    if (findBook) throw new BadRequestException('이미 등록된 서적 입니다.');
 
     const bookShelf = this.create({
       title,
@@ -38,23 +41,31 @@ export class BookShelfRepository extends Repository<BookShelf> {
     });
 
     await this.save(bookShelf);
-    return bookShelf;
   }
 
-  async updateBookShelf(id: number, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {
-    const updateBook = await this.getBookShelfById(id);
+  async updateBookShelf(id: number, user: User, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {
+    const query = this.createQueryBuilder('bookShelf');
+    query.where('bookShelf.userId = :userId', { userId: user.id });
+    query.andWhere('bookShelf.id = :id', { id });
+    const findBook = await query.getOne();
+
+    if (!findBook) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
+
     const { memo, rating, status } = updateBookShelfDto;
 
-    updateBook.memo = memo;
-    updateBook.rating = rating;
-    updateBook.status = status ? status : updateBook.status;
+    findBook.memo = memo;
+    findBook.rating = rating;
+    findBook.status = status ? status : findBook.status;
 
-    await this.save(updateBook);
-    return updateBook;
+    await this.save(findBook);
+    return findBook;
   }
 
   async deleteBookShelf(id: number, user: User): Promise<void> {
-    const found = await this.getBookShelfById(id);
-    await this.delete({ id: found.id, user });
+    const result = await this.delete({ id, user });
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`해당되는 서적을 찾을 수 없습니다.`);
+    }
   }
 }

@@ -15,7 +15,7 @@ export class BookShelfController {
 
   @Get()
   getAllBookShelf(@GetUser() user: User): Promise<BookShelf[]> {
-    this.logger.verbose(`getAllBookShelf: ${user.nickname}`);
+    this.logger.verbose(`getAllBookShelf: ${user.email}`);
     return this.bookShelfService.getAllBookShelf(user);
   }
 
@@ -26,7 +26,7 @@ export class BookShelfController {
   }
 
   @Post()
-  createBookShelf(@Body() createBookShelfDto: CreateBookShelfDto, @GetUser() user: User): Promise<BookShelf> {
+  createBookShelf(@Body() createBookShelfDto: CreateBookShelfDto, @GetUser() user: User): Promise<void> {
     this.logger.verbose(`createBookShelf: ${JSON.stringify(createBookShelfDto)}`);
     return this.bookShelfService.createBookShelf(createBookShelfDto, user);
   }
@@ -35,13 +35,14 @@ export class BookShelfController {
   updateBookShelf(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateBookShelfDto: UpdateBookShelfDto,
+    @GetUser() user: User,
   ): Promise<BookShelf> {
     this.logger.verbose(`updateBookShelf : ${id}`);
-    return this.bookShelfService.updateBookShelf(id, updateBookShelfDto);
+    return this.bookShelfService.updateBookShelf(id, user, updateBookShelfDto);
   }
 
   @Delete('/:id')
-  deleteBookShelf(@Param('id', ParseIntPipe) id, @GetUser() user: User): Promise<void> {
+  deleteBookShelf(@Param('id', ParseIntPipe) id: number, @GetUser() user: User): Promise<void> {
     this.logger.verbose(`deleteBookShelf : ${id}`);
     return this.bookShelfService.deleteBookShelf(id, user);
   }
