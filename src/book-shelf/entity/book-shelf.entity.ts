@@ -1,8 +1,9 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from 'src/auth/entity/user.entity';
 import { Common } from './common.entity';
 import { BookStatus } from '../book-status.enum';
 
-@Entity({ name: 'BookShelf' })
+@Entity({ name: 'bookShelf' })
 export class BookShelf extends Common {
   @PrimaryGeneratedColumn()
   id: number;
@@ -30,4 +31,7 @@ export class BookShelf extends Common {
 
   @Column({ default: BookStatus.READING })
   status: BookStatus;
+
+  // @ManyToOne(() => User, user => user.id)
+  // user: User;
 }

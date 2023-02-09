@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CreateBookShelfDto {
   @IsString()
@@ -23,7 +23,9 @@ export class CreateBookShelfDto {
   @IsOptional()
   readonly memo?: string;
 
-  @IsNumber()
+  @IsInt()
+  @Min(0)
+  @Max(5)
   @IsOptional()
   readonly rating?: number;
 }

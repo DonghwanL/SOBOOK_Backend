@@ -16,19 +16,19 @@ export class BookShelfService {
     return this.bookShelfRepository.getAllBookShelf();
   }
 
-  createBookShelf(createBookShelfDto: CreateBookShelfDto): Promise<BookShelf> {
-    return this.bookShelfRepository.createBookShelf(createBookShelfDto);
-  }
-
   getBookShelfById(id: number): Promise<BookShelf> {
     return this.bookShelfRepository.getBookShelfById(id);
   }
 
-  deleteBookShelf(id: number): Promise<void> {
-    return this.bookShelfRepository.deleteBookShelf(id);
+  createBookShelf(createBookShelfDto: CreateBookShelfDto): Promise<BookShelf> {
+    return this.bookShelfRepository.createBookShelf(createBookShelfDto);
   }
 
   updateBookShelf(id: number, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {
     return this.bookShelfRepository.updateBookShelf(id, updateBookShelfDto);
+  }
+
+  deleteBookShelf(id: number): Promise<void> {
+    return this.bookShelfRepository.deleteBookShelf(id);
   }
 }
