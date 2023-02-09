@@ -6,7 +6,6 @@ import { BooksModule } from './books/books.module';
 import { BookShelfModule } from './book-shelf/book-shelf.module';
 import { BookShelf } from './book-shelf/entity/book-shelf.entity';
 import { AuthModule } from './auth/auth.module';
-import { AuthService } from './auth/auth.service';
 import { User } from './auth/entity/user.entity';
 
 @Module({
@@ -39,6 +38,5 @@ import { User } from './auth/entity/user.entity';
     BookShelfModule,
     AuthModule,
   ],
-  providers: [AuthService],
 })
 export class AppModule {}
