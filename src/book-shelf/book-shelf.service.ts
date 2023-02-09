@@ -4,6 +4,7 @@ import { BookShelf } from './entity/book-shelf.entity';
 import { BookShelfRepository } from './repository/book-shelf.repository';
 import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
 import { UpdateBookShelfDto } from './dto/update-bookShelf.dto';
+import { User } from 'src/auth/entity/user.entity';
 
 @Injectable()
 export class BookShelfService {
@@ -20,8 +21,8 @@ export class BookShelfService {
     return this.bookShelfRepository.getBookShelfById(id);
   }
 
-  createBookShelf(createBookShelfDto: CreateBookShelfDto): Promise<BookShelf> {
-    return this.bookShelfRepository.createBookShelf(createBookShelfDto);
+  createBookShelf(createBookShelfDto: CreateBookShelfDto, user: User): Promise<BookShelf> {
+    return this.bookShelfRepository.createBookShelf(createBookShelfDto, user);
   }
 
   updateBookShelf(id: number, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {

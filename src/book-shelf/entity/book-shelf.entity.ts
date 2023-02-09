@@ -26,12 +26,12 @@ export class BookShelf extends Common {
   @Column({ nullable: true })
   memo: string;
 
+  @ManyToOne(type => User, user => user.bookShelf, { eager: false, nullable: false, onDelete: 'CASCADE' })
+  user: User;
+
   @Column({ default: 0 })
   rating: number;
 
   @Column({ default: BookStatus.READING })
   status: BookStatus;
-
-  // @ManyToOne(() => User, user => user.id)
-  // user: User;
 }

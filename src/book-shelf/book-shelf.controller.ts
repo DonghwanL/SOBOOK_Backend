@@ -1,10 +1,14 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { BookShelfService } from './book-shelf.service';
 import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
 import { BookShelf } from './entity/book-shelf.entity';
 import { UpdateBookShelfDto } from './dto/update-bookShelf.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/auth/get-user-decorator';
+import { User } from 'src/auth/entity/user.entity';
 
 @Controller('bookShelf')
+@UseGuards(AuthGuard())
 export class BookShelfController {
   constructor(private readonly bookShelfService: BookShelfService) {}
 
@@ -19,8 +23,8 @@ export class BookShelfController {
   }
 
   @Post()
-  createBookShelf(@Body() createBookShelfDto: CreateBookShelfDto): Promise<BookShelf> {
-    return this.bookShelfService.createBookShelf(createBookShelfDto);
+  createBookShelf(@Body() createBookShelfDto: CreateBookShelfDto, @GetUser() user: User): Promise<BookShelf> {
+    return this.bookShelfService.createBookShelf(createBookShelfDto, user);
   }
 
   @Patch('/:id')

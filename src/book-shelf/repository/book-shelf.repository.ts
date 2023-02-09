@@ -4,6 +4,7 @@ import { BookShelf } from '../entity/book-shelf.entity';
 import { CustomRepository } from '../../common/typeorm-ex.decorator';
 import { CreateBookShelfDto } from '../dto/create-bookShelf.dto';
 import { UpdateBookShelfDto } from '../dto/update-bookShelf.dto';
+import { User } from 'src/auth/entity/user.entity';
 
 @CustomRepository(BookShelf)
 export class BookShelfRepository extends Repository<BookShelf> {
@@ -18,7 +19,7 @@ export class BookShelfRepository extends Repository<BookShelf> {
     return found;
   }
 
-  async createBookShelf(createBookShelfDto: CreateBookShelfDto): Promise<BookShelf> {
+  async createBookShelf(createBookShelfDto: CreateBookShelfDto, user: User): Promise<BookShelf> {
     const { title, image, author, publisher, pubdate, memo, rating } = createBookShelfDto;
 
     const bookShelf = this.create({
@@ -29,6 +30,7 @@ export class BookShelfRepository extends Repository<BookShelf> {
       pubdate,
       memo,
       rating,
+      user,
     });
 
     await this.save(bookShelf);

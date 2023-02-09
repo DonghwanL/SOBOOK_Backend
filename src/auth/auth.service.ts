@@ -13,6 +13,13 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async checkEmail(email: string) {
+    const checkEmail = await this.userRepository.findOneBy({ email });
+
+    if (checkEmail) return { result: false };
+    else return { result: true };
+  }
+
   signUp(authcredentialsDto: AuthCredentialsDto): Promise<void> {
     return this.userRepository.createUser(authcredentialsDto);
   }

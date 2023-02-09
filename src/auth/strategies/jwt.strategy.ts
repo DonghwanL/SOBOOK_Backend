@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user: User = await this.userRepository.findOneBy({ email });
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('존재하지 않는 사용자 입니다.');
     }
 
     return user;
