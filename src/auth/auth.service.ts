@@ -24,15 +24,13 @@ export class AuthService {
     return this.userRepository.createUser(authcredentialsDto);
   }
 
-  async login(authcredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
+  async login(authcredentialsDto: AuthCredentialsDto): Promise<{ access_Token: string }> {
     const { email, password } = authcredentialsDto;
     const user = await this.userRepository.findOneBy({ email });
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      // AccessToken 생성
       const payload = { email };
-      const accessToken = this.jwtService.sign(payload);
-      return { accessToken };
+      return { access_Token: this.jwtService.sign(payload) };
     } else {
       throw new UnauthorizedException('이메일 혹은 비밀번호를 확인 해주세요.');
     }

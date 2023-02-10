@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Logger, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { AuthCredentialsDto } from './dto/auth-credential.dto';
 
@@ -20,8 +21,16 @@ export class AuthController {
   }
 
   @Post('/login')
-  login(@Body() authcredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
+  async login(@Body() authcredentialsDto: AuthCredentialsDto, @Res({ passthrough: true }) res: Response) {
     this.logger.verbose(`login: ${JSON.stringify(authcredentialsDto.email)}`);
-    return this.authService.login(authcredentialsDto);
+
+    const accessToken = await this.authService.login(authcredentialsDto);
+    res.cookie('Authentication', accessToken, {
+      domain: 'localhost',
+      path: '/',
+      httpOnly: true,
+    });
+
+    return accessToken;
   }
 }
