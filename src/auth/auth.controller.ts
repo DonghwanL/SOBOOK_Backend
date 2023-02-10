@@ -11,7 +11,7 @@ export class AuthController {
   @Get('/:email')
   checkEmail(@Param('email') email: string) {
     this.logger.verbose(`checkEmail: ${email}`);
-    return this.authService.checkEmail(email);
+    return this.authService.getByEmail(email);
   }
 
   @Post('/signup')
@@ -23,14 +23,13 @@ export class AuthController {
   @Post('/login')
   async login(@Body() authcredentialsDto: AuthCredentialsDto, @Res({ passthrough: true }) res: Response) {
     this.logger.verbose(`login: ${JSON.stringify(authcredentialsDto.email)}`);
+    const { token, ...options } = await this.authService.login(authcredentialsDto);
+    res.cookie('Authentication', token, options);
+  }
 
-    const accessToken = await this.authService.login(authcredentialsDto);
-    res.cookie('Authentication', accessToken, {
-      domain: 'localhost',
-      path: '/',
-      httpOnly: true,
-    });
-
-    return accessToken;
+  @Post('/logout')
+  async logOut(@Res({ passthrough: true }) res: Response) {
+    const { token, ...options } = await this.authService.logOut();
+    res.cookie('Authentication', token, options);
   }
 }

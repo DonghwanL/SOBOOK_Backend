@@ -7,6 +7,10 @@ import { AuthCredentialsDto } from '../dto/auth-credential.dto';
 
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
+  async getByIdUser(email: string): Promise<User> {
+    return this.findOneBy({ email });
+  }
+
   async createUser(authcredentialsDto: AuthCredentialsDto): Promise<void> {
     const { email, nickname, password } = authcredentialsDto;
 
