@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { BookShelfService } from './book-shelf.service';
-import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
+import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
 import { BookShelf } from './entity/book-shelf.entity';
-import { UpdateBookShelfDto } from './dto/update-bookShelf.dto';
+import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetUser } from 'src/auth/get-user-decorator';
 import { User } from 'src/auth/entity/user.entity';
@@ -26,19 +26,19 @@ export class BookShelfController {
   }
 
   @Post()
-  createBookShelf(@Body() createBookShelfDto: CreateBookShelfDto, @GetUser() user: User): Promise<void> {
-    this.logger.verbose(`createBookShelf: ${JSON.stringify(createBookShelfDto)}`);
-    return this.bookShelfService.createBookShelf(createBookShelfDto, user);
+  createBookShelf(@Body() createBookShelfDTO: CreateBookShelfDTO, @GetUser() user: User): Promise<void> {
+    this.logger.verbose(`createBookShelf: ${JSON.stringify(createBookShelfDTO)}`);
+    return this.bookShelfService.createBookShelf(createBookShelfDTO, user);
   }
 
   @Patch('/:id')
   updateBookShelf(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateBookShelfDto: UpdateBookShelfDto,
+    @Body() updateBookShelfDTO: UpdateBookShelfDTO,
     @GetUser() user: User,
   ): Promise<BookShelf> {
     this.logger.verbose(`updateBookShelf : ${id}`);
-    return this.bookShelfService.updateBookShelf(id, user, updateBookShelfDto);
+    return this.bookShelfService.updateBookShelf(id, user, updateBookShelfDTO);
   }
 
   @Delete('/:id')

@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty, IsOptional, IsString, Max, Min } from 'class-validator';
 
-export class CreateBookShelfDto {
+export class CreateBookShelfDTO {
   @IsString()
   @IsNotEmpty()
   readonly title: string;

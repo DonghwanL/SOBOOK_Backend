@@ -1,5 +1,6 @@
 import * as Joi from 'joi';
 import { Module } from '@nestjs/common';
+import { HttpModule } from '@nestjs/axios';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BooksModule } from './books/books.module';
@@ -40,6 +41,7 @@ import { User } from './auth/entity/user.entity';
     BooksModule,
     BookShelfModule,
     AuthModule,
+    HttpModule,
   ],
 })
 export class AppModule {}

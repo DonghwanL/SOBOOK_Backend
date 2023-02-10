@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookShelf } from './entity/book-shelf.entity';
 import { BookShelfRepository } from './repository/book-shelf.repository';
-import { CreateBookShelfDto } from './dto/create-bookShelf.dto';
-import { UpdateBookShelfDto } from './dto/update-bookShelf.dto';
+import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
+import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
 import { User } from 'src/auth/entity/user.entity';
 
 @Injectable()
@@ -21,12 +21,12 @@ export class BookShelfService {
     return this.bookShelfRepository.getBookShelfById(id);
   }
 
-  createBookShelf(createBookShelfDto: CreateBookShelfDto, user: User): Promise<void> {
-    return this.bookShelfRepository.createBookShelf(createBookShelfDto, user);
+  createBookShelf(createBookShelfDTO: CreateBookShelfDTO, user: User): Promise<void> {
+    return this.bookShelfRepository.createBookShelf(createBookShelfDTO, user);
   }
 
-  updateBookShelf(id: number, user: User, updateBookShelfDto: UpdateBookShelfDto): Promise<BookShelf> {
-    return this.bookShelfRepository.updateBookShelf(id, user, updateBookShelfDto);
+  updateBookShelf(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
+    return this.bookShelfRepository.updateBookShelf(id, user, updateBookShelfDTO);
   }
 
   deleteBookShelf(id: number, user: User): Promise<void> {

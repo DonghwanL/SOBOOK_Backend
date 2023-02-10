@@ -1,34 +1,35 @@
 import { Body, Controller, Get, Logger, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { AuthCredentialsDto } from './dto/auth-credential.dto';
+import { AuthCredentialsDTO } from './dto/auth-credential.dto';
 
 @Controller('auth')
 export class AuthController {
   private logger = new Logger('AuthController');
   constructor(private authService: AuthService) {}
 
-  @Get('/:email')
-  checkEmail(@Param('email') email: string) {
-    this.logger.verbose(`checkEmail: ${email}`);
-    return this.authService.getByEmail(email);
+  @Get('/:id')
+  getById(@Param('id') id: string) {
+    this.logger.verbose(`checkEmail: ${id}`);
+    return this.authService.getById(id);
   }
 
   @Post('/signup')
-  signUp(@Body() authcredentialsDto: AuthCredentialsDto) {
-    this.logger.verbose(`signUp: ${JSON.stringify(authcredentialsDto)}`);
-    return this.authService.signUp(authcredentialsDto);
+  signUp(@Body() authcredentialsDTO: AuthCredentialsDTO) {
+    this.logger.verbose(`signUp: ${JSON.stringify(authcredentialsDTO)}`);
+    return this.authService.signUp(authcredentialsDTO);
   }
 
   @Post('/login')
-  async login(@Body() authcredentialsDto: AuthCredentialsDto, @Res({ passthrough: true }) res: Response) {
-    this.logger.verbose(`login: ${JSON.stringify(authcredentialsDto.email)}`);
-    const { token, ...options } = await this.authService.login(authcredentialsDto);
+  async login(@Body() authcredentialsDTO: AuthCredentialsDTO, @Res({ passthrough: true }) res: Response) {
+    this.logger.verbose(`login: ${JSON.stringify(authcredentialsDTO.email)}`);
+    const { token, ...options } = await this.authService.login(authcredentialsDTO);
     res.cookie('Authentication', token, options);
   }
 
   @Post('/logout')
   async logOut(@Res({ passthrough: true }) res: Response) {
+    this.logger.verbose(`logout`);
     const { token, ...options } = await this.authService.logOut();
     res.cookie('Authentication', token, options);
   }

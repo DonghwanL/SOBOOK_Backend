@@ -2,7 +2,7 @@ import * as bcrypt from 'bcryptjs';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredentialsDto } from './dto/auth-credential.dto';
+import { AuthCredentialsDTO } from './dto/auth-credential.dto';
 import { UserRepository } from './repository/user.repository';
 import { ConfigService } from '@nestjs/config';
 
@@ -15,18 +15,19 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
-  async getByEmail(email: string) {
+  async getById(email: string) {
     const user = await this.userRepository.getByIdUser(email);
-    if (user) return { result: false };
-    else return { result: true };
+    return {
+      result: user ? false : true,
+    };
   }
 
-  async signUp(authcredentialsDto: AuthCredentialsDto): Promise<void> {
-    return await this.userRepository.createUser(authcredentialsDto);
+  async signUp(authcredentialsDTO: AuthCredentialsDTO): Promise<void> {
+    return await this.userRepository.createUser(authcredentialsDTO);
   }
 
-  async login(authcredentialsDto: AuthCredentialsDto) {
-    const { email, password } = authcredentialsDto;
+  async login(authcredentialsDTO: AuthCredentialsDTO) {
+    const { email, password } = authcredentialsDTO;
     const user = await this.userRepository.getByIdUser(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
