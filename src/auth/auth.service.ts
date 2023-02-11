@@ -32,26 +32,12 @@ export class AuthService {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { email };
-      const token = this.jwtService.sign(payload);
+
       return {
-        token,
-        domain: 'localhost',
-        path: '/',
-        httpOnly: true,
-        maxAge: Number(this.configService.get('JWT_EXPIRATION_TIME')) * 1000,
+        access_token: this.jwtService.sign(payload),
       };
     } else {
       throw new UnauthorizedException('이메일 혹은 비밀번호를 확인 해주세요.');
     }
-  }
-
-  async logOut() {
-    return {
-      token: '',
-      domain: 'localhost',
-      path: '/',
-      httpOnly: true,
-      maxAge: 0,
-    };
   }
 }

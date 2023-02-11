@@ -2,6 +2,7 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { map, Observable } from 'rxjs';
+import { parseString } from 'xml2js';
 import { SearchBooksDTO } from './dto/search-books.dto';
 
 @Injectable()
@@ -18,6 +19,16 @@ export class BooksService {
 
     const result = await this.http
       .get(`${process.env.NAVER_SEARCH_API_SERVER}/book.json?query=${query}&start=${start}`, {
+        headers: this.headersRequest,
+      })
+      .pipe(map(response => response.data));
+
+    return result;
+  }
+
+  async getBookById(id: string): Promise<Observable<AxiosResponse>> {
+    const result = await this.http
+      .get(`${process.env.NAVER_SEARCH_API_SERVER}/book_adv.xml?d_isbn=${id}`, {
         headers: this.headersRequest,
       })
       .pipe(map(response => response.data));

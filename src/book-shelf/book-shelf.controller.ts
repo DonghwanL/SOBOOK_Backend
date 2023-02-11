@@ -20,7 +20,7 @@ export class BookShelfController {
   }
 
   @Get('/:id')
-  getBookShelfById(@Param('id') id: number): Promise<BookShelf> {
+  getBookShelfById(@Param('id', ParseIntPipe) id: number): Promise<BookShelf> {
     this.logger.verbose(`getBookShelfById : ${id}`);
     return this.bookShelfService.getBookShelfById(id);
   }

@@ -21,16 +21,9 @@ export class AuthController {
   }
 
   @Post('/login')
-  async login(@Body() authcredentialsDTO: AuthCredentialsDTO, @Res({ passthrough: true }) res: Response) {
+  async login(@Body() authcredentialsDTO: AuthCredentialsDTO) {
     this.logger.verbose(`login: ${JSON.stringify(authcredentialsDTO.email)}`);
-    const { token, ...options } = await this.authService.login(authcredentialsDTO);
-    res.cookie('Authentication', token, options);
-  }
-
-  @Post('/logout')
-  async logOut(@Res({ passthrough: true }) res: Response) {
-    this.logger.verbose(`logout`);
-    const { token, ...options } = await this.authService.logOut();
-    res.cookie('Authentication', token, options);
+    const accessToken = await this.authService.login(authcredentialsDTO);
+    return accessToken;
   }
 }

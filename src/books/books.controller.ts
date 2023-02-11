@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
 import { BooksService } from './books.service';
@@ -13,5 +13,11 @@ export class BooksController {
   getSearchBook(@Body() searchBooksDTO: SearchBooksDTO): Promise<Observable<AxiosResponse>> {
     this.logger.verbose(`getSearchBook : ${JSON.stringify(searchBooksDTO)}`);
     return this.booksService.getSearchBook(searchBooksDTO);
+  }
+
+  @Get('/search/:id')
+  getBookById(@Param('id') id: string): Promise<Observable<AxiosResponse>> {
+    this.logger.verbose(`getBookById : ${id}`);
+    return this.booksService.getBookById(id);
   }
 }
