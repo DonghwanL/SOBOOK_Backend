@@ -2,7 +2,7 @@ import { Body, Controller, Get, Logger, Param, Post, Res } from '@nestjs/common'
 import { AuthService } from './auth.service';
 import { AuthCredentialsDTO } from './dto/auth-credential.dto';
 
-@Controller('auth')
+@Controller('api/auth')
 export class AuthController {
   private logger = new Logger('AuthController');
   constructor(private authService: AuthService) {}

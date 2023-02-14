@@ -16,10 +16,8 @@ export class AuthService {
   ) {}
 
   async getById(email: string) {
-    const user = await this.userRepository.getByIdUser(email);
-    return {
-      result: user ? false : true,
-    };
+    const result = await this.userRepository.getByIdUser(email);
+    return result ? false : true;
   }
 
   async signUp(authcredentialsDTO: AuthCredentialsDTO): Promise<void> {

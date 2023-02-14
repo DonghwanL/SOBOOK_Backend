@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { Observable } from 'rxjs';
 import { BooksService } from './books.service';
 
-@Controller('books')
+@Controller('api/books')
 export class BooksController {
   private logger = new Logger('BooksController');
   constructor(private booksService: BooksService) {}
