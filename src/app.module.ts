@@ -8,6 +8,8 @@ import { BookShelfModule } from './book-shelf/book-shelf.module';
 import { BookShelf } from './book-shelf/entity/book-shelf.entity';
 import { AuthModule } from './auth/auth.module';
 import { User } from './user/entity/user.entity';
+import { APP_GUARD } from '@nestjs/core';
+import { AtGuard } from './common/guards';
 
 @Module({
   imports: [
@@ -24,9 +26,7 @@ import { User } from './user/entity/user.entity';
         DB_PASSWORD: Joi.string().required(),
         DB_DATABASE: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRATION_TIME: Joi.string().required(),
         JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
-        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
@@ -44,6 +44,12 @@ import { User } from './user/entity/user.entity';
     BookShelfModule,
     AuthModule,
     HttpModule,
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: AtGuard,
+    },
   ],
 })
 export class AppModule {}

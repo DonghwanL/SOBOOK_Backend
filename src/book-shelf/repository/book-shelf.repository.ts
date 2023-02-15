@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { BookShelf } from '../entity/book-shelf.entity';
-import { CustomRepository } from '../../common/typeorm-ex.decorator';
+import { CustomRepository } from '../../common/decorators/typeorm-ex.decorator';
 import { CreateBookShelfDTO } from '../dto/create-bookShelf.dto';
 import { UpdateBookShelfDTO } from '../dto/update-bookShelf.dto';
 import { User } from 'src/user/entity/user.entity';
