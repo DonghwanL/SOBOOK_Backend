@@ -4,8 +4,8 @@ import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
 import { BookShelf } from './entity/book-shelf.entity';
 import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { GetUser } from 'src/auth/get-user-decorator';
-import { User } from 'src/auth/entity/user.entity';
+import { GetUser } from 'src/user/get-user-decorator';
+import { User } from 'src/user/entity/user.entity';
 
 @Controller('api/bookShelf')
 @UseGuards(AuthGuard())

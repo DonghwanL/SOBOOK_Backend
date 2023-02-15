@@ -4,7 +4,7 @@ import { BookShelf } from './entity/book-shelf.entity';
 import { BookShelfRepository } from './repository/book-shelf.repository';
 import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
 import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
-import { User } from 'src/auth/entity/user.entity';
+import { User } from 'src/user/entity/user.entity';
 
 @Injectable()
 export class BookShelfService {

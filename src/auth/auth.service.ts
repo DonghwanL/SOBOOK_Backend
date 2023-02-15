@@ -2,8 +2,8 @@ import * as bcrypt from 'bcryptjs';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AuthCredentialsDTO } from './dto/auth-credential.dto';
-import { UserRepository } from './repository/user.repository';
+import { UserDTO } from '../user/dto/user.dto';
+import { UserRepository } from '../user/repository/user.repository';
 import { ConfigService } from '@nestjs/config';
 
 @Injectable()
@@ -20,19 +20,26 @@ export class AuthService {
     return result ? false : true;
   }
 
-  async signUp(authcredentialsDTO: AuthCredentialsDTO): Promise<void> {
-    return await this.userRepository.createUser(authcredentialsDTO);
+  async signUp(userDTO: UserDTO): Promise<void> {
+    return await this.userRepository.createUser(userDTO);
   }
 
-  async login(authcredentialsDTO: AuthCredentialsDTO) {
-    const { email, password } = authcredentialsDTO;
+  async login(userDTO: UserDTO) {
+    const { email, password } = userDTO;
     const user = await this.userRepository.getByIdUser(email);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { email };
 
       return {
-        access_token: this.jwtService.sign(payload),
+        accessToken: this.jwtService.sign(payload, {
+          secret: process.env.JWT_SECRET,
+          expiresIn: process.env.JWT_EXPIRATION_TIME,
+        }),
+        refreshToken: this.jwtService.sign(payload, {
+          secret: process.env.JWT_REFRESH_TOKEN_SECRET,
+          expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+        }),
       };
     } else {
       throw new UnauthorizedException('이메일 혹은 비밀번호를 확인 해주세요.');

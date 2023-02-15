@@ -3,7 +3,7 @@ import { ConflictException, InternalServerErrorException } from '@nestjs/common'
 import { Repository } from 'typeorm';
 import { CustomRepository } from 'src/common/typeorm-ex.decorator';
 import { User } from '../entity/user.entity';
-import { AuthCredentialsDTO } from '../dto/auth-credential.dto';
+import { UserDTO } from '../dto/user.dto';
 
 @CustomRepository(User)
 export class UserRepository extends Repository<User> {
@@ -11,8 +11,8 @@ export class UserRepository extends Repository<User> {
     return this.findOneBy({ email });
   }
 
-  async createUser(authcredentialsDTO: AuthCredentialsDTO): Promise<void> {
-    const { email, nickname, password } = authcredentialsDTO;
+  async createUser(userDTO: UserDTO): Promise<void> {
+    const { email, nickname, password } = userDTO;
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);

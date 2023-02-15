@@ -7,7 +7,7 @@ import { BooksModule } from './books/books.module';
 import { BookShelfModule } from './book-shelf/book-shelf.module';
 import { BookShelf } from './book-shelf/entity/book-shelf.entity';
 import { AuthModule } from './auth/auth.module';
-import { User } from './auth/entity/user.entity';
+import { User } from './user/entity/user.entity';
 
 @Module({
   imports: [
@@ -25,6 +25,8 @@ import { User } from './auth/entity/user.entity';
         DB_DATABASE: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION_TIME: Joi.string().required(),
+        JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
     TypeOrmModule.forRoot({
