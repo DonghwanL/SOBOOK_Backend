@@ -36,7 +36,7 @@ export class AuthController {
   @UseGuards(AtGuard)
   @Post('/logout')
   @HttpCode(HttpStatus.OK)
-  logout(@GetCurrentUser('sub') userId: number) {
+  logout(@GetCurrentUserId() userId: number) {
     this.logger.verbose(`logout: ${userId}`);
     return this.authService.logout(userId);
   }

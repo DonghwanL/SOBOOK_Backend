@@ -26,7 +26,7 @@ export class BookShelf extends Common {
   @Column({ nullable: true })
   memo: string;
 
-  @ManyToOne(type => User, user => user.bookShelf, { eager: false, nullable: false, onDelete: 'CASCADE' })
+  @ManyToOne(() => User, user => user.bookShelf, { eager: false, nullable: false, onDelete: 'SET NULL' })
   user: User;
 
   @Column({ default: 0 })

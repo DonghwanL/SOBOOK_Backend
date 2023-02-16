@@ -1,35 +1,75 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookShelf } from './entity/book-shelf.entity';
 import { BookShelfRepository } from './repository/book-shelf.repository';
+import { UserRepository } from 'src/user/repository/user.repository';
 import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
 import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
 import { User } from 'src/user/entity/user.entity';
+import { serializeUser } from 'passport';
 
 @Injectable()
 export class BookShelfService {
   constructor(
     @InjectRepository(BookShelfRepository)
+    private userRepository: UserRepository,
     private bookShelfRepository: BookShelfRepository,
   ) {}
 
-  getAllBookShelf(user: User): Promise<BookShelf[]> {
-    return this.bookShelfRepository.getAllBookShelf(user);
+  async getAllBookShelf(userId: number): Promise<BookShelf[]> {
+    const query = this.bookShelfRepository.createQueryBuilder('bookShelf');
+    query.where('bookShelf.userId = :userId', { userId });
+    const bookShelf = await query.getMany();
+
+    return bookShelf;
   }
 
-  getBookShelfById(id: number): Promise<BookShelf> {
-    return this.bookShelfRepository.getBookShelfById(id);
+  async getBookShelfById(id: number): Promise<BookShelf> {
+    const found = await this.bookShelfRepository.findOneBy({ id });
+    if (!found) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
+    return found;
   }
 
-  createBookShelf(createBookShelfDTO: CreateBookShelfDTO, user: User): Promise<void> {
-    return this.bookShelfRepository.createBookShelf(createBookShelfDTO, user);
+  async createBookShelf(createBookShelfDTO: CreateBookShelfDTO, user: User): Promise<void> {
+    const { title, image, author, publisher, pubdate, memo, rating } = createBookShelfDTO;
+
+    const bookShelf = this.bookShelfRepository.create({
+      title,
+      image,
+      author,
+      publisher,
+      pubdate,
+      memo,
+      rating,
+      user,
+    });
+
+    await this.bookShelfRepository.save(bookShelf);
   }
 
-  updateBookShelf(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
-    return this.bookShelfRepository.updateBookShelf(id, user, updateBookShelfDTO);
+  async updateBookShelf(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
+    const query = this.bookShelfRepository.createQueryBuilder('bookShelf');
+    query.where('bookShelf.userId = :userId', { userId: user.id });
+    query.andWhere('bookShelf.id = :id', { id });
+    const findBook = await query.getOne();
+
+    if (!findBook) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
+
+    const { memo, rating, status } = updateBookShelfDTO;
+
+    findBook.memo = memo;
+    findBook.rating = rating;
+    findBook.status = status ? status : findBook.status;
+
+    const bookShelf = await this.bookShelfRepository.save(findBook);
+    return bookShelf;
   }
 
-  deleteBookShelf(id: number, user: User): Promise<void> {
-    return this.bookShelfRepository.deleteBookShelf(id, user);
+  async deleteBookShelf(id: number, user: User): Promise<void> {
+    const result = await this.bookShelfRepository.delete({ id, user });
+
+    if (result.affected === 0) {
+      throw new NotFoundException(`해당되는 서적을 찾을 수 없습니다.`);
+    }
   }
 }

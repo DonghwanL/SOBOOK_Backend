@@ -5,6 +5,7 @@ import { BookShelf } from './entity/book-shelf.entity';
 import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
 import { GetCurrentUser } from 'src/common/decorators/get-current-user-decorator';
 import { User } from 'src/user/entity/user.entity';
+import { GetCurrentUserId } from 'src/common/decorators';
 
 @Controller('api/bookShelf')
 export class BookShelfController {
@@ -12,9 +13,9 @@ export class BookShelfController {
   constructor(private readonly bookShelfService: BookShelfService) {}
 
   @Get()
-  getAllBookShelf(@GetCurrentUser() user: User): Promise<BookShelf[]> {
-    this.logger.verbose(`getAllBookShelf: ${user.email}`);
-    return this.bookShelfService.getAllBookShelf(user);
+  getAllBookShelf(@GetCurrentUserId() userId: number): Promise<BookShelf[]> {
+    this.logger.verbose(`getAllBookShelf: ${userId}`);
+    return this.bookShelfService.getAllBookShelf(userId);
   }
 
   @Get('/:id')

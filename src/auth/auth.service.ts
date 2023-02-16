@@ -43,15 +43,15 @@ export class AuthService {
   async login(userDTO: UserDTO): Promise<Tokens> {
     const { email, password } = userDTO;
     const user = await this.userRepository.findOneBy({ email });
+    if (!user) throw new ForbiddenException('Access Denied');
 
-    if (!user || !user.hashedRt) throw new ForbiddenException('Access Denied');
-
+    //|| !user.hashedRt
     const passwordMatches = await argon.verify(user.password, password);
     if (!passwordMatches) throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
 
     const tokens = await this.getTokens(user.id, user.email, user.nickname);
     await this.updateRtHash(user.id, tokens.refresh_token);
-    return tokens;
+    return { ...tokens, nickname: user.nickname };
   }
 
   async logout(userId: number) {
@@ -80,11 +80,11 @@ export class AuthService {
     });
   }
 
-  async getTokens(userId: number, email: string, nickname: string): Promise<Tokens> {
+  async getTokens(id: number, email: string, nickname: string): Promise<Tokens> {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
         {
-          sub: userId,
+          id,
           email,
           nickname,
         },
@@ -95,7 +95,7 @@ export class AuthService {
       ),
       this.jwtService.signAsync(
         {
-          sub: userId,
+          id,
           email,
           nickname,
         },

@@ -17,7 +17,7 @@ export class User extends Common {
   @Column()
   password: string;
 
-  @OneToMany(type => BookShelf, bookShelf => bookShelf.user, { eager: true })
+  @OneToMany(() => BookShelf, bookShelf => bookShelf.user, { eager: true })
   bookShelf: BookShelf[];
 
   @Column({ default: true })
