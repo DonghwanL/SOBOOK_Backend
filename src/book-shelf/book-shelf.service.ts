@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookShelf } from './entity/book-shelf.entity';
 import { BookShelfRepository } from './repository/book-shelf.repository';
@@ -6,7 +6,6 @@ import { UserRepository } from 'src/user/repository/user.repository';
 import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
 import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
 import { User } from 'src/user/entity/user.entity';
-import { serializeUser } from 'passport';
 
 @Injectable()
 export class BookShelfService {
@@ -19,6 +18,7 @@ export class BookShelfService {
   async getAllBookShelf(userId: number): Promise<BookShelf[]> {
     const query = this.bookShelfRepository.createQueryBuilder('bookShelf');
     query.where('bookShelf.userId = :userId', { userId });
+    query.orderBy({ 'bookShelf.updatedAt': 'DESC' });
     const bookShelf = await query.getMany();
 
     return bookShelf;
@@ -31,7 +31,7 @@ export class BookShelfService {
   }
 
   async createBookShelf(createBookShelfDTO: CreateBookShelfDTO, user: User): Promise<void> {
-    const { title, image, author, publisher, pubdate, memo, rating } = createBookShelfDTO;
+    const { title, image, author, publisher, pubdate, contents, rating } = createBookShelfDTO;
 
     const bookShelf = this.bookShelfRepository.create({
       title,
@@ -39,7 +39,7 @@ export class BookShelfService {
       author,
       publisher,
       pubdate,
-      memo,
+      contents,
       rating,
       user,
     });
@@ -47,7 +47,7 @@ export class BookShelfService {
     await this.bookShelfRepository.save(bookShelf);
   }
 
-  async updateBookShelf(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
+  async updateBookState(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
     const query = this.bookShelfRepository.createQueryBuilder('bookShelf');
     query.where('bookShelf.userId = :userId', { userId: user.id });
     query.andWhere('bookShelf.id = :id', { id });
@@ -55,11 +55,23 @@ export class BookShelfService {
 
     if (!findBook) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
 
-    const { memo, rating, status } = updateBookShelfDTO;
+    const { status } = updateBookShelfDTO;
+    findBook.status = status;
 
-    findBook.memo = memo;
-    findBook.rating = rating;
-    findBook.status = status ? status : findBook.status;
+    const bookShelf = await this.bookShelfRepository.save(findBook);
+    return bookShelf;
+  }
+
+  async updateBookContents(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
+    const query = this.bookShelfRepository.createQueryBuilder('bookShelf');
+    query.where('bookShelf.userId = :userId', { userId: user.id });
+    query.andWhere('bookShelf.id = :id', { id });
+    const findBook = await query.getOne();
+
+    if (!findBook) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
+
+    const { contents } = updateBookShelfDTO;
+    findBook.contents = contents;
 
     const bookShelf = await this.bookShelfRepository.save(findBook);
     return bookShelf;

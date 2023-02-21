@@ -30,14 +30,24 @@ export class BookShelfController {
     return this.bookShelfService.createBookShelf(createBookShelfDTO, user);
   }
 
-  @Patch('/:id')
-  updateBookShelf(
+  @Patch('/status/:id')
+  updateBookState(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateBookShelfDTO: UpdateBookShelfDTO,
     @GetCurrentUser() user: User,
   ): Promise<BookShelf> {
-    this.logger.verbose(`updateBookShelf : ${id}`);
-    return this.bookShelfService.updateBookShelf(id, user, updateBookShelfDTO);
+    this.logger.verbose(`updateBookState : ${id}`);
+    return this.bookShelfService.updateBookState(id, user, updateBookShelfDTO);
+  }
+
+  @Patch('/contents/:id')
+  updateBookContents(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateBookShelfDTO: UpdateBookShelfDTO,
+    @GetCurrentUser() user: User,
+  ): Promise<BookShelf> {
+    this.logger.verbose(`updateBookContents : ${id}`);
+    return this.bookShelfService.updateBookContents(id, user, updateBookShelfDTO);
   }
 
   @Delete('/:id')

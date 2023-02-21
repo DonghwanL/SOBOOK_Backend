@@ -24,7 +24,7 @@ export class BookShelf extends Common {
   image: string;
 
   @Column({ nullable: true })
-  memo: string;
+  contents: string;
 
   @ManyToOne(() => User, user => user.bookShelf, { eager: false, nullable: false, onDelete: 'SET NULL' })
   user: User;

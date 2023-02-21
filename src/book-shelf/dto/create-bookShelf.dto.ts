@@ -21,7 +21,7 @@ export class CreateBookShelfDTO {
   readonly image?: string;
 
   @IsOptional()
-  readonly memo?: string;
+  readonly contents?: string;
 
   @IsInt()
   @Min(0)
