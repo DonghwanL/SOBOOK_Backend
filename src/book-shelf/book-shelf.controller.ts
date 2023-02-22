@@ -40,6 +40,16 @@ export class BookShelfController {
     return this.bookShelfService.updateBookState(id, user, updateBookShelfDTO);
   }
 
+  @Patch('/rating/:id')
+  updateBookRating(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateBookShelfDTO: UpdateBookShelfDTO,
+    @GetCurrentUser() user: User,
+  ): Promise<BookShelf> {
+    this.logger.verbose(`updateBookRating : ${id}`);
+    return this.bookShelfService.updateBookRating(id, user, updateBookShelfDTO);
+  }
+
   @Patch('/contents/:id')
   updateBookContents(
     @Param('id', ParseIntPipe) id: number,

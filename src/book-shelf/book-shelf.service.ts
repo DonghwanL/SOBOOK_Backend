@@ -2,7 +2,6 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookShelf } from './entity/book-shelf.entity';
 import { BookShelfRepository } from './repository/book-shelf.repository';
-import { UserRepository } from 'src/user/repository/user.repository';
 import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
 import { UpdateBookShelfDTO } from './dto/update-bookShelf.dto';
 import { User } from 'src/user/entity/user.entity';
@@ -11,7 +10,6 @@ import { User } from 'src/user/entity/user.entity';
 export class BookShelfService {
   constructor(
     @InjectRepository(BookShelfRepository)
-    private userRepository: UserRepository,
     private bookShelfRepository: BookShelfRepository,
   ) {}
 
@@ -57,6 +55,21 @@ export class BookShelfService {
 
     const { status } = updateBookShelfDTO;
     findBook.status = status;
+
+    const bookShelf = await this.bookShelfRepository.save(findBook);
+    return bookShelf;
+  }
+
+  async updateBookRating(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
+    const query = this.bookShelfRepository.createQueryBuilder('bookShelf');
+    query.where('bookShelf.userId = :userId', { userId: user.id });
+    query.andWhere('bookShelf.id = :id', { id });
+    const findBook = await query.getOne();
+
+    if (!findBook) throw new NotFoundException('해당되는 서적을 찾을 수 없습니다.');
+
+    const { rating } = updateBookShelfDTO;
+    findBook.rating = rating;
 
     const bookShelf = await this.bookShelfRepository.save(findBook);
     return bookShelf;
