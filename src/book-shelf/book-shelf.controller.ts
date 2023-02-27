@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, Logger, Param, ParseIntPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Logger,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { BookShelfService } from './book-shelf.service';
 import { CreateBookShelfDTO } from './dto/create-bookShelf.dto';
 import { BookShelf } from './entity/book-shelf.entity';
@@ -25,7 +37,11 @@ export class BookShelfController {
   }
 
   @Post()
-  createBookShelf(@Body() createBookShelfDTO: CreateBookShelfDTO, @GetCurrentUser() user: User): Promise<void> {
+  createBookShelf(
+    @Res() response: Response,
+    @Body() createBookShelfDTO: CreateBookShelfDTO,
+    @GetCurrentUser() user: User,
+  ): Promise<BookShelf> {
     this.logger.verbose(`createBookShelf: ${JSON.stringify(createBookShelfDTO)}`);
     return this.bookShelfService.createBookShelf(createBookShelfDTO, user);
   }

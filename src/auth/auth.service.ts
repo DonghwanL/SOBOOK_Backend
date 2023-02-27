@@ -43,9 +43,8 @@ export class AuthService {
   async login(userDTO: UserDTO): Promise<Tokens> {
     const { email, password } = userDTO;
     const user = await this.userRepository.findOneBy({ email });
-    if (!user) throw new ForbiddenException('Access Denied');
+    if (!user || !user.hashedRt) throw new ForbiddenException('Access Denied');
 
-    //|| !user.hashedRt
     const passwordMatches = await argon.verify(user.password, password);
     if (!passwordMatches) throw new ForbiddenException('비밀번호가 일치하지 않습니다.');
 

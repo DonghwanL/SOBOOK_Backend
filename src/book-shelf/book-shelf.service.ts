@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BookShelf } from './entity/book-shelf.entity';
 import { BookShelfRepository } from './repository/book-shelf.repository';
@@ -28,8 +28,11 @@ export class BookShelfService {
     return found;
   }
 
-  async createBookShelf(createBookShelfDTO: CreateBookShelfDTO, user: User): Promise<void> {
+  async createBookShelf(createBookShelfDTO: CreateBookShelfDTO, user: User): Promise<BookShelf> {
     const { title, image, author, publisher, pubdate, contents, rating } = createBookShelfDTO;
+
+    const found = await this.bookShelfRepository.findOneBy({ title });
+    if (found) throw new ConflictException('이미 등록된 서적 입니다.');
 
     const bookShelf = this.bookShelfRepository.create({
       title,
@@ -42,7 +45,7 @@ export class BookShelfService {
       user,
     });
 
-    await this.bookShelfRepository.save(bookShelf);
+    return await this.bookShelfRepository.save(bookShelf);
   }
 
   async updateBookState(id: number, user: User, updateBookShelfDTO: UpdateBookShelfDTO): Promise<BookShelf> {
