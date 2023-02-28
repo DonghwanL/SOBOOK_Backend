@@ -9,7 +9,7 @@
 <br>
 
 <b>해당 Repository는 Backend 작업에 대한 상세 정보 입니다.
-Fronted 관련 정보는 이곳을 참고 해주세요! <a href="https://github.com/DonghwanL/SOBOOK_Frontend">이동하기</a></b>
+Frontend 관련 정보는 이곳을 참고 해주세요! <a href="https://github.com/DonghwanL/SOBOOK_Frontend">이동하기</a></b>
 <br>
 <br>
 
