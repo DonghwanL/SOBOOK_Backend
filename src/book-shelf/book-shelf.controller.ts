@@ -37,11 +37,7 @@ export class BookShelfController {
   }
 
   @Post()
-  createBookShelf(
-    @Res() response: Response,
-    @Body() createBookShelfDTO: CreateBookShelfDTO,
-    @GetCurrentUser() user: User,
-  ): Promise<BookShelf> {
+  createBookShelf(@Body() createBookShelfDTO: CreateBookShelfDTO, @GetCurrentUser() user: User): Promise<BookShelf> {
     this.logger.verbose(`createBookShelf: ${JSON.stringify(createBookShelfDTO)}`);
     return this.bookShelfService.createBookShelf(createBookShelfDTO, user);
   }
