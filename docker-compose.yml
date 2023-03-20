@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:14.4
+    environment:
+      POSTGRES_USER: hwan
+      POSTGRES_PASSWORD: kkkk9080
+      POSTGRES_DB: sobook-backend
+    ports:
+      - "5432:5432"
+    restart: always
+
+  sobook:
+    image: 551481840219.dkr.ecr.ap-northeast-2.amazonaws.com/sobook:latest
+    depends_on:
+      - postgres
+    ports:
+      - "80:9000"
+    
+  # nginx:
+  #   container_name: nginx
+  #   image: nginx:stable-alpine
+  #   logging:
+  #     driver: syslog
+  #   volumes:
+  #     - /etc/nginx/conf.d:/etc/nginx/conf.d
+  #     - /etc/nginx/certs:/etc/nginx/certs:ro
+  #     - /etc/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   links:
+  #     - sobook:sobook
+  #   ports:
+  #     - 80:9000
